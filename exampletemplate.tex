@@ -1,0 +1,72 @@
+\documentclass[DIN, pagenumber=footmiddle, parskip=half,
+fromalign=right,  % Align sender to the right
+fromphone=true, fromfax=false,
+fromrule=false]{scrlttr2}
+
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{longtable}
+\usepackage{eurosym}
+
+\setkomavar{fromname}{Company Name}
+\setkomavar{fromphone}{0152645965}
+\setkomavar{fromaddress}{Street \\ Postalcode City}
+\setkomavar{frombank}{Volksbank Musterstadt \\ BLZ: 123 456 00 \\ \\ Kontonummer: 123 456 000\\Volksbank Musterstadt}
+
+\setkomavar {subject}[]{<document.subject>}
+\setkomavar {yourmail}[Ihre Angebots-Nr.]{<document.id>}
+\setkomavar {yourref}[Ihre Kundennummer]{<customer.id>}
+\setkomavar {date}[Datum]{<document.date>}
+
+\begin{document}
+\begin{letter}{
+Monika Musterfrau\\ 
+Musterstr. 12\\
+12345 Musterstadt
+}
+
+\opening{Sehr geehrte Damen und Herren,}
+<#document.body>
+<text>
+\newline
+</document.body>
+
+\newpage
+
+\begin{longtable}{p{4cm}p{5.5cm}p{2cm}p{4cm}}
+Ihre Kundennummer & <customer.id> & Datum & <document.date>\\
+Ihre Angebots-Nr. & <document.id> & Gültig bis & <document.due>\\
+\end{longtable}
+
+\begin{longtable}{p{0.5cm}p{5.5cm}p{1cm}p{1cm}p{2.5cm}p{2.5cm}}
+\hline
+Pos. & Bezeichnung & Menge & ME & Einzelpreis & Gesamtpreis\\
+\hline
+<#document.content>
+  <#heading>
+    \\
+    \multicolumn{6}{l}{\textbf{<body>}}\\
+  </heading>
+  <#entry>
+    <body.position> & <body.description> & <body.quantity> & <body.unit> & <body.pricePerUnit> \euro{} & <body.amount> \euro{}\\
+  </entry>
+  <#subtotal>
+    \multicolumn{5}{r}{Zwischensumme iPhone (exkl. MwSt.):} & 0,00 \euro{}\\
+    \\
+  </subtotal>
+</document.content>
+\hline
+\hline 
+\end{longtable}
+
+\begin{longtable}{p{5.5cm}p{2.5cm}p{2.5cm}p{2cm}p{3cm}}
+\hline Nettobetrag Gesamt & 19\% MwSt. & Versand & Verpackung & Bruttobetrag\\
+\hline 
+0,00 \euro{} & 0,00 \euro & 0,00 \euro & 0,00 \euro & 0,00 \euro{}\\
+\hline\hline 	
+\end{longtable}
+
+\end{letter}
+\end{document}

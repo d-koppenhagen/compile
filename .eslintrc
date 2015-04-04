@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "semi": [1, "never"],
+    "no-extra-semi": 1,
+    "curly": 1,
+    "no-eval": 2,
+    "indent": [1, 2],
+    "comma-style": 1,
+    "quotes": [1, "single"],
+    "new-cap": 0
+  },
+  "env": {
+    "node": true
+  }
+}
