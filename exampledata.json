@@ -1,8 +1,12 @@
 {
   "customer": {
     "id": "165312",
-    "name": "John Doe",
-    "street": "Street"
+    "name": "Doe Corp",
+    "contact": "Jane Doe",
+    "street": "Street",
+    "housenumber": "3a",
+    "postalcode": "15648",
+    "city": "Wondercity"
   },
   "document": {
     "id": "21323",
@@ -57,7 +61,8 @@
         }
       },
       {
-        "type": "subtotal"
+        "type": "subtotal",
+        "body": "Subtotal description text:"
       },
       {
         "type": "entry",
