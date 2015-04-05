@@ -12,13 +12,40 @@ module.exports = function(data) {
 
     var currentSub = 0
     var totalSum = 0
+    var tax = 0
 
     //by looping through every index (the indexes are IN ORDER because we are working with an array)
     _.forEach(content, function(value) {
+      //this is the part where additional Information is added per entry
 
       //if we have an entry
       if (value.type === 'entry') {
-        //we increment our current subtotal accordingly
+        //calculate the actual price of this entry and apply the discount
+        value.body.amount = (value.body.quantity * value.body.pricePerUnit)
+
+        //check if this entry is discounted
+        if (value.body.hasOwnProperty('discount')) {
+
+          //check if this discount is a fixed discount, or a percentage
+          if (value.body.discount.type === 'fixed') {
+            //simply subtract the fixed amount
+            value.body.amount -= value.body.discount.amount
+          } else {
+
+            //calculate the endresult by multiplying 'value.body.amount' by 100% - 'value.body.discount.amount'
+            value.body.amount *= (1 - (value.body.discount.amount / 100))
+          }
+        }
+
+        //check if this  object has a special tax base specified
+        if (value.hasOwnProperty('tax')) {
+          tax += (value.body.tax / 100) * value.body.amount
+        } else {
+          //if it has not, use the global tax base
+          tax += (data.document.tax / 100) * value.body.amount
+        }
+
+        //lastly, we increment our subtotal
         currentSub += value.body.amount
       }
       //if we have a subtotal
@@ -44,7 +71,7 @@ module.exports = function(data) {
 
     //assign the netto, the tax and the gross values accordingly
     total.nett = totalSum
-    total.tax = totalSum * 0.19
+    total.tax = tax
     total.gross = total.nett + total.tax + total.shipping + total.packing
 
   } else {
