@@ -26,7 +26,7 @@ server.use(restify.queryParser())
  * Errors are always sent upstream and they should be caught and logged to our bunyan logger
  * @param  {object}
  */
-function logErrorAndReturn (error) {
+function logError (error) {
   if (error) {
     log.error(error)
   }
@@ -47,7 +47,7 @@ server.get('/document', function (request, response, next){
      */
     template: function(callback){
       fs.readFile('exampletemplate.tex', 'utf8', function (error, file) {
-        logErrorAndReturn(error)
+        logError(error)
         template = file
         callback(null, template)
       })
@@ -59,7 +59,7 @@ server.get('/document', function (request, response, next){
      */
     data: function(callback){
       fs.readFile('exampledata.json', 'utf8', function (error, file) {
-        logErrorAndReturn(error)
+        logError(error)
         /**
          * Converts the JSON string to an object for further processing. Lo-Dash and
          * Mustache require an object.
