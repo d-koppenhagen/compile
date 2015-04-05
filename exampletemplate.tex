@@ -22,9 +22,12 @@ fromrule=false]{scrlttr2}
 
 \begin{document}
 \begin{letter}{
-Monika Musterfrau\\ 
-Musterstr. 12\\
-12345 Musterstadt
+<customer.name>\\
+<#customer.contact>
+<customer.contact>\\
+</customer.contact>
+<customer.street> <customer.housenumber>\\
+<customer.postalcode> <customer.city>
 }
 
 \opening{Sehr geehrte Damen und Herren,}
@@ -53,7 +56,7 @@ Pos. & Bezeichnung & Menge & ME & Einzelpreis & Gesamtpreis\\
     <body.position> & <body.description> & <body.quantity> & <body.unit> & <body.pricePerUnit> \euro{} & <body.amount> \euro{}\\
   </entry>
   <#subtotal>
-    \multicolumn{5}{r}{Zwischensumme iPhone (exkl. MwSt.):} & 0,00 \euro{}\\
+    \multicolumn{5}{r}{<body>} & <amount> \euro{}\\
     \\
   </subtotal>
 </document.content>
