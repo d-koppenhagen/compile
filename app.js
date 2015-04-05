@@ -71,7 +71,10 @@ server.get('/document', function (request, response, next){
          */
         data = JSON.parse(file)
 
-        compiler.compile(data, logError)
+        /**
+         * Compute and add any additional data based on a specialised compiler
+         */
+        error(compiler.compile(data, logError))
 
         /**
          * Mustache tempaltes are logicless, so you can not write if statements

@@ -5,7 +5,7 @@ var eslint = require('gulp-eslint')
 var nodemon = require('gulp-nodemon')
 
 gulp.task('lint', function () {
-  return gulp.src(['**.js', '**/*.js'])
+  return gulp.src(['**.js', '**/*.js', '!node_modules/**'])
   .pipe(eslint())
   .pipe(eslint.format())
   .pipe(eslint.failOnError())
