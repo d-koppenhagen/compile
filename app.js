@@ -7,10 +7,10 @@ var fs = require('fs')
 var async = require('async')
 var _ = require('lodash')
 
-var log = new bunyan.createLogger({
+var log = bunyan.createLogger({
   name: 'storycrm.compile',
   serializers: {
-  req: bunyan.stdSerializers.req
+    req: bunyan.stdSerializers.req
   }
 })
 
@@ -67,13 +67,22 @@ server.get('/document', function (request, response, next){
          */
         data = JSON.parse(file)
 
+        if (data.document.content.constructor === Array)
+        {
+          _.forEach(data.document.content, function(value) {
+            
+          })
+        } else {
+          log.warn('JSON file has non array content')
+        }
+
         /**
          * Mustache tempaltes are logicless, so you can not write if statements
-         * but you can check wheater a variable is true. We store the content types
+         * but you can check whether a variable is true or false. We store the content types
          * as "type": "whatever" but Mustache needs "whatever": true.
          * Now we query for type and set an item based on the type to true.
          */
-        _.forIn(data.document.content, function(value) {
+        _.forEach(data.document.content, function(value) {
           value[value.type] = true
         })
 
