@@ -1,4 +1,5 @@
 {
+  "type" : "invoice",
   "customer": {
     "id": "165312",
     "name": "Doe Corp",
@@ -74,7 +75,15 @@
           "pricePerUnit": 165,
           "amount": 5940
         }
+      },
+      {
+        "type": "subtotal",
+        "body": "Subtotal description text:"
       }
-    ]
+    ],
+    "total" : {
+      "shipping" : 0.0,
+      "packing" : 0.0
+    }
   }
 }

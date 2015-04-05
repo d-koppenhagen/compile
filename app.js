@@ -7,6 +7,8 @@ var fs = require('fs')
 var async = require('async')
 var _ = require('lodash')
 
+var compiler = require('./compiler/compiler')
+
 var log = bunyan.createLogger({
   name: 'storycrm.compile',
   serializers: {
@@ -31,6 +33,8 @@ function logError (error) {
     log.error(error)
   }
 }
+
+compiler.load(log)
 
 server.get('/document', function (request, response, next){
 
@@ -67,14 +71,7 @@ server.get('/document', function (request, response, next){
          */
         data = JSON.parse(file)
 
-        if (data.document.content.constructor === Array)
-        {
-          _.forEach(data.document.content, function(value) {
-            
-          })
-        } else {
-          log.warn('JSON file has non array content')
-        }
+        compiler.compile(data, logError)
 
         /**
          * Mustache tempaltes are logicless, so you can not write if statements
