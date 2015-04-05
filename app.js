@@ -107,7 +107,7 @@ server.get('/document', function (request, response, next){
         response.send(texfile)
         next()
       } else {
-        var latexStream = require('latex')(texfile)
+        var latexStream = require('latex')(texfile, 'luatex')
         latexStream.pipe(response)
         next()
       }
