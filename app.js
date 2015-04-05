@@ -74,7 +74,7 @@ server.get('/document', function (request, response, next){
         /**
          * Compute and add any additional data based on a specialised compiler
          */
-        error(compiler.compile(data, logError))
+        logError(compiler.compile(data, logError))
 
         /**
          * Mustache tempaltes are logicless, so you can not write if statements

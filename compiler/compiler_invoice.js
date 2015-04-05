@@ -17,7 +17,7 @@ module.exports = function(data) {
     _.forEach(content, function(value) {
 
       //if we have an entry
-      if (value.type === 'entry'){
+      if (value.type === 'entry') {
         //we increment our current subtotal accordingly
         currentSub += value.body.amount
       }
