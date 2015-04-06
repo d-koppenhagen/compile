@@ -1,8 +1,10 @@
 'use strict'
 
 var fs = require('fs')
+var _ = require('lodash')
 
 var compilers = {}
+var logger = null
 
 /**
  * Loads all compilers in the './compiler/' directory and adds them to the list of known compilers
@@ -10,10 +12,11 @@ var compilers = {}
  * @param {Log} log the logger used to record events
  */
 exports.load = function(log) {
+  logger = log.child({widget_type: 'compiler'})
   fs.readdir('./compiler/', function(error, files) {
     if (error){
-      log.fatal('Could not load ANY compilers!')
-      log.error(error)
+      logger.fatal('Could not load ANY compilers!')
+      logger.error(error)
       return
     }
 
@@ -45,12 +48,31 @@ exports.compile = function(data) {
     return new Error('Datafile does not contain a \'type\' field!')
   }
 
-  //check if we have a compiler registered for this type of document
-  if (compilers[data.type]) {
-    //if we have a compiler, call its method to compute the final data to be put into the template
-    return compilers[data.type](data)
+  //check if we need to invoke multiple compilers
+  if (data.type.constructor === Array) {
+    //loop through each compiler IN ORDER
+    _.forEach(data.type, function(value) {
+      if (compilers[value]) {
+        //invoke the compiler, but do NOT return possible errors directly
+        var err = compilers[value](data, logger)
+
+        //instead only return iff an error was 'thrown'
+        if (err) {
+          return err
+        }
+        //else continue the compilation process
+      } else {
+        return new Error('No compiler found for  data type \'' + value + '\'')
+      }
+    })
   } else {
-    //if we don't have a compiler for this document, tell the layer above
-    return new Error('No compiler found for data type \'' + data.type + '\'')
+    //check if we have a compiler registered for this type of document
+    if (compilers[data.type]) {
+      //if we have a compiler, call its method to compute the final data to be put into the template
+      return compilers[data.type](data, logger)
+    } else {
+      //if we don't have a compiler for this document, tell the layer above
+      return new Error('No compiler found for data type \'' + data.type + '\'')
+    }
   }
 }

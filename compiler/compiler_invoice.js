@@ -2,7 +2,7 @@
 
 var _ = require('lodash')
 
-module.exports = function(data) {
+module.exports = function(data, log) {
 
   //check if the 'document.content' is an array
   var content = data.document.content
@@ -67,11 +67,32 @@ module.exports = function(data) {
     }
 
     //load 'document.total' or create a default if the 'total' object is undefined
-    var total = data.document.total || {shipping: 0.0, packing: 0.0}
+    var total = data.document.total || {shipping: 0.0, packing: 0.0, auto: true}
 
-    //assign the netto, the tax and the gross values accordingly
-    total.nett = totalSum
-    total.tax = tax
+    if (total.auto) {
+      log.warn('JSON data did not contain a \'total\' field. This could lead to unexpected behaviour!')
+    }
+
+    //assign the netto, the tax and the gross values
+    //by checking if there are total discounts
+    //WARNING: 'Fixed' discounts are applied AFTER Tax calculations, iff they are calculated for the whole invoice
+    if (total.hasOwnProperty('discount')) {
+      if (total.discount.type === 'fixed') {
+        log.info('applying fixed discount at the invoice level!')
+        log.debug('The discount applied will be AFTER tax calculations')
+        //see warning above
+        total.nett = totalSum - total.discount.amount
+        total.tax = tax
+      } else {
+        //apply the standard discount calculation
+        var percentage = (1 - (total.discount.amount / 100.0))
+        total.nett = totalSum * percentage
+        total.tax = tax * percentage
+      }
+    } else {
+      total.nett = totalSum
+      total.tax = tax
+    }
     total.gross = total.nett + total.tax + total.shipping + total.packing
 
   } else {
