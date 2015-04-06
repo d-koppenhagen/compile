@@ -30,7 +30,13 @@ server.use(restify.queryParser())
  */
 function logError (error) {
   if (error) {
-    log.error(error)
+    if (error.constructor === Array) {
+      for (var i = 0; i < error.length; i++) {
+        logError(error[i])
+      }
+    } else {
+      log.error(error)
+    }
   }
 }
 
@@ -74,7 +80,7 @@ server.get('/document', function (request, response, next){
         /**
          * Compute and add any additional data based on a specialised compiler
          */
-        logError(compiler.compile(data, logError))
+        logError(compiler.compile(data))
 
         /**
          * Mustache tempaltes are logicless, so you can not write if statements

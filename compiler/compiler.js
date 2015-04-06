@@ -12,7 +12,7 @@ var logger = null
  * @param {Log} log the logger used to record events
  */
 exports.load = function(log) {
-  logger = log.child({widget_type: 'compiler'})
+  logger = log.child({module: 'compiler'})
   fs.readdir('./compiler/', function(error, files) {
     if (error){
       logger.fatal('Could not load ANY compilers!')
@@ -50,21 +50,17 @@ exports.compile = function(data) {
 
   //check if we need to invoke multiple compilers
   if (data.type.constructor === Array) {
+    var error = []
     //loop through each compiler IN ORDER
     _.forEach(data.type, function(value) {
       if (compilers[value]) {
         //invoke the compiler, but do NOT return possible errors directly
-        var err = compilers[value](data, logger)
-
-        //instead only return iff an error was 'thrown'
-        if (err) {
-          return err
-        }
-        //else continue the compilation process
+        error[error.length] = compilers[value](data, logger)
       } else {
-        return new Error('No compiler found for  data type \'' + value + '\'')
+        error[error.length] = new Error('No compiler found for data type \'' + value + '\'')
       }
     })
+    return error
   } else {
     //check if we have a compiler registered for this type of document
     if (compilers[data.type]) {

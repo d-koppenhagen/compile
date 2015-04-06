@@ -96,7 +96,10 @@ module.exports = function(data, log) {
     total.gross = total.nett + total.tax + total.shipping + total.packing
 
   } else {
-    //if the 'document.content' object is NOT an arry, we cannot compile it
+    //if the 'document.content' object is NOT an array, we cannot compile it
     return new Error('Invoice document did NOT have a content array')
   }
+
+  //no error, just return null
+  return null
 }

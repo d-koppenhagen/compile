@@ -12,16 +12,15 @@ gulp.task('lint', function () {
   .pipe(eslint.failOnError())
 })
 
-gulp.task('default', function () {
+gulp.task('default', ['lint'], function () {
   nodemon({
     script: 'app.js',
     ext: 'js',
-    env: {'NODE_ENV': 'development'},
-    tasks: ['lint']
+    env: {'NODE_ENV': 'development'}
   })
 })
 
-gulp.task('bunyan', function() {
+gulp.task('bunyan', ['lint'], function() {
   var bunyan
   nodemon({
     script: 'app.js',
@@ -30,12 +29,10 @@ gulp.task('bunyan', function() {
     tasks: ['lint'],
     readable: false,
     stdout: false
-  }).on('restart', function() {
-    if (bunyan) {
-      bunyan && bunyan.kill()
-    }
   }).on('readable', function() {
-    bunyan && bunyan.kill()
+    if (bunyan) {
+      bunyan.kill()
+    }
 
     bunyan = cp.spawn('bunyan', ['--color'])
 

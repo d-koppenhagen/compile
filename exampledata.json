@@ -1,5 +1,5 @@
 {
-  "type" : "invoice",
+  "type" : ["invoice"],
   "customer": {
     "id": "165312",
     "name": "Doe Corp",
