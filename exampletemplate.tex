@@ -4,11 +4,11 @@ fromphone=true, fromfax=false,
 fromrule=false]{scrlttr2}
 
 \usepackage{ngerman}
-\usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{longtable}
 \usepackage{eurosym}
+\usepackage{fontspec}
 
 \setkomavar{fromname}{Company Name}
 \setkomavar{fromphone}{0152645965}
@@ -53,7 +53,7 @@ Pos. & Bezeichnung & Menge & ME & Einzelpreis & Gesamtpreis\\
     \multicolumn{6}{l}{\textbf{<body>}}\\
   </heading>
   <#entry>
-    <body.position> & <body.description> & <body.quantity> & <body.unit> & <body.pricePerUnit> \euro{} & <body.amount> \euro{}\\
+    <body.position> & <body.description> & <body.quantity> & <body.unit> & -<body.discount.amount> <body.pricePerUnit> \euro{} & <body.amount> \euro{}\\
   </entry>
   <#subtotal>
     \multicolumn{5}{r}{<body>} & <amount> \euro{}\\

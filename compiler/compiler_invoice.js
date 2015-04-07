@@ -67,7 +67,7 @@ module.exports = function(data, log) {
     }
 
     //load 'document.total' or create a default if the 'total' object is undefined
-    var total = data.document.total || {shipping: 0.0, packing: 0.0, auto: true}
+    var total = data.document.total || {auto: true}
 
     if (total.auto) {
       log.warn('JSON data did not contain a \'total\' field. This could lead to unexpected behaviour!')
@@ -93,8 +93,8 @@ module.exports = function(data, log) {
       total.nett = totalSum
       total.tax = tax
     }
-    total.gross = total.nett + total.tax + total.shipping + total.packing
-
+    total.gross = total.nett + total.tax
+    data.document.total = total
   } else {
     //if the 'document.content' object is NOT an array, we cannot compile it
     return new Error('Invoice document did NOT have a content array')

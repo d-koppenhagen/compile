@@ -6,8 +6,12 @@ var mustache = require('mustache')
 var fs = require('fs')
 var async = require('async')
 var _ = require('lodash')
+var request = require('request')
+var config = require('config')
 
 var compiler = require('./compiler/compiler')
+
+var service = config.get('Service')
 
 var log = bunyan.createLogger({
   name: 'storycrm.compile',
@@ -42,7 +46,7 @@ function logError (error) {
 
 compiler.load(log)
 
-server.get('/document', function (request, response, next){
+server.get('/document/:documentID', function (req, res, next){
 
   var template
   var data
@@ -68,14 +72,25 @@ server.get('/document', function (request, response, next){
      * @return {Object}
      */
     data: function(callback){
-      fs.readFile('exampledata.json', 'utf8', function (error, file) {
+      request(service.datastore + '/' + req.params.documentID, function (error, res, body) {
         logError(error)
-        /**
-         * Converts the JSON string to an object for further processing. Lo-Dash and
-         * Mustache require an object.
-         * @type {String}
-         */
-        data = JSON.parse(file)
+
+        if (res.statusCode !== 200 && res.statusCode !== 304) {
+          log.error('Received status code ' + res.statusCode + ' from datastore!')
+          return
+        }
+
+        try {
+          /**
+           * Converts the JSON string to an object for further processing. Lo-Dash and
+           * Mustache require an object.
+           * @type {String}
+           */
+          data = JSON.parse(body)
+        } catch (e) {
+          log.fatal(e)
+          throw e
+        }
 
         /**
          * Compute and add any additional data based on a specialised compiler
@@ -116,14 +131,14 @@ server.get('/document', function (request, response, next){
        * Detects the desired output and responds with either the parsed tex file
        * or the compiled pdf file. The tex file is mainly used for debugging purposes.
        */
-      if (request.params.type === 'tex') {
-        response.setHeader('content-type', 'text/plain')
-        response.charSet('utf-8')
-        response.send(texfile)
+      if (req.params.type === 'tex') {
+        res.setHeader('content-type', 'text/plain')
+        res.charSet('utf-8')
+        res.send(texfile)
         next()
       } else {
-        var latexStream = require('latex')(texfile, 'luatex')
-        latexStream.pipe(response)
+        var latexStream = require('latex')(texfile, {command: 'xelatex'})
+        latexStream.pipe(res)
         next()
       }
 
