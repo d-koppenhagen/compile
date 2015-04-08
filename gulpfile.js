@@ -7,9 +7,9 @@ var cp = require('child_process')
 
 gulp.task('lint', function () {
   return gulp.src(['**.js', '**/*.js', '!node_modules/**'])
-  .pipe(eslint())
-  .pipe(eslint.format())
-  .pipe(eslint.failOnError())
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError())
 })
 
 gulp.task('default', ['lint'], function () {
@@ -20,7 +20,7 @@ gulp.task('default', ['lint'], function () {
   })
 })
 
-gulp.task('bunyan', ['lint'], function() {
+gulp.task('bunyan', ['lint'], function () {
   var bunyan
   nodemon({
     script: 'app.js',
@@ -29,7 +29,7 @@ gulp.task('bunyan', ['lint'], function() {
     tasks: ['lint'],
     readable: false,
     stdout: false
-  }).on('readable', function() {
+  }).on('readable', function () {
     if (bunyan) {
       bunyan.kill()
     }

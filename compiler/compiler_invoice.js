@@ -2,12 +2,11 @@
 
 var _ = require('lodash')
 
-module.exports = function(data, log) {
+module.exports = function (data, log) {
 
   //check if the 'document.content' is an array
   var content = data.document.content
-  if (content.constructor === Array)
-  {
+  if (content.constructor === Array) {
     //if it is, we need to calculate the subtotal and total values of the invoice
 
     var currentSub = 0
@@ -15,7 +14,7 @@ module.exports = function(data, log) {
     var tax = 0
 
     //by looping through every index (the indexes are IN ORDER because we are working with an array)
-    _.forEach(content, function(value) {
+    _.forEach(content, function (value) {
       //this is the part where additional Information is added per entry
 
       //if we have an entry
@@ -60,8 +59,7 @@ module.exports = function(data, log) {
     })
 
     //calculate the total sum even if there are no subbtotals left
-    if (currentSub !== 0)
-    {
+    if (currentSub !== 0) {
       totalSum += currentSub
       currentSub = 0
     }

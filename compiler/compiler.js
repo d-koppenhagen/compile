@@ -9,7 +9,7 @@ var logger = null
 /**
  * Loads all compilers in the './compiler/' directory and adds them to the list of known compilers
  * NOTE: special case function that 'handles' errors itself
- * @param {Log} log the logger used to record events
+ * @param log log the logger used to record events
  */
 exports.load = function(log) {
   logger = log.child({module: 'compiler'})
@@ -39,8 +39,8 @@ exports.load = function(log) {
 
 /**
  * Computes additional information for the template
- * @param  {Object}
- * @return {Error} error Any Error that might occur
+ * @return Error
+ * @param data
  */
 exports.compile = function(data) {
   //check to see if the data object supports formatting by checking its type field
