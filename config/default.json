@@ -1,6 +1,6 @@
 {
   "Service" : {
-    "datastore" : "http://localhost:8081/document",
+    "datastore" : "http://localhost:8081",
     "compile" : "http://localhost:8080/document"
   }
 }

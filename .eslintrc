@@ -8,6 +8,7 @@
     "comma-style": 1,
     "quotes": [1, "single"],
     "new-cap": 0,
+    "no-underscore-dangle": 0,
     "no-shadow": 1
   },
   "env": {

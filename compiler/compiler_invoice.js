@@ -2,12 +2,16 @@
 
 var _ = require('lodash')
 
-module.exports = function(data, log) {
-
+/**
+ *
+ * @param data the data object to be compiled
+ * @param log the log to be used for any console output
+ * @returns {*} error any error that might occur
+ */
+module.exports = function (data, log) {
   //check if the 'document.content' is an array
   var content = data.document.content
-  if (content.constructor === Array)
-  {
+  if (content.constructor === Array) {
     //if it is, we need to calculate the subtotal and total values of the invoice
 
     var currentSub = 0
@@ -15,7 +19,7 @@ module.exports = function(data, log) {
     var tax = 0
 
     //by looping through every index (the indexes are IN ORDER because we are working with an array)
-    _.forEach(content, function(value) {
+    _.forEach(content, function (value) {
       //this is the part where additional Information is added per entry
 
       //if we have an entry
@@ -32,7 +36,7 @@ module.exports = function(data, log) {
             value.body.amount -= value.body.discount.amount
           } else {
 
-            //calculate the endresult by multiplying 'value.body.amount' by 100% - 'value.body.discount.amount'
+            //calculate the end result by multiplying 'value.body.amount' by 100% - 'value.body.discount.amount'
             value.body.amount *= (1 - (value.body.discount.amount / 100))
           }
         }
@@ -60,8 +64,7 @@ module.exports = function(data, log) {
     })
 
     //calculate the total sum even if there are no subbtotals left
-    if (currentSub !== 0)
-    {
+    if (currentSub !== 0) {
       totalSum += currentSub
       currentSub = 0
     }
@@ -78,8 +81,10 @@ module.exports = function(data, log) {
     //WARNING: 'Fixed' discounts are applied AFTER Tax calculations, iff they are calculated for the whole invoice
     if (total.hasOwnProperty('discount')) {
       if (total.discount.type === 'fixed') {
-        log.info('applying fixed discount at the invoice level!')
-        log.debug('The discount applied will be AFTER tax calculations')
+        if (total.discount.amount !== 0) {
+          log.info('applying fixed discount at the invoice level!')
+          log.debug('The discount applied will be AFTER tax calculations')
+        }
         //see warning above
         total.nett = totalSum - total.discount.amount
         total.tax = tax

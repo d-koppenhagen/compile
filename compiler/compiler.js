@@ -9,12 +9,12 @@ var logger = null
 /**
  * Loads all compilers in the './compiler/' directory and adds them to the list of known compilers
  * NOTE: special case function that 'handles' errors itself
- * @param {Log} log the logger used to record events
+ * @param log the logger used to record events
  */
-exports.load = function(log) {
+exports.load = function (log) {
   logger = log.child({module: 'compiler'})
-  fs.readdir('./compiler/', function(error, files) {
-    if (error){
+  fs.readdir('./compiler/', function (error, files) {
+    if (error) {
       logger.fatal('Could not load ANY compilers!')
       logger.error(error)
       return
@@ -27,10 +27,10 @@ exports.load = function(log) {
       if (files[i] !== 'compiler' && files[i].slice(0, 9) === 'compiler_') {
 
         /**
-        /* import the currently selected file and register it for its specific type
-        /* the type to register it under is defined by the name of the file without the 'compiler_' prefix and without the '.js' suffix
-        /* this results in the regex: /compiler_(.*)\.js/
-        */
+         /* import the currently selected file and register it for its specific type
+         /* the type to register it under is defined by the name of the file without the 'compiler_' prefix and without the '.js' suffix
+         /* this results in the regex: /compiler_(.*)\.js/
+         */
         compilers[files[i].slice(9, -3)] = require('./' + files[i])
       }
     }
@@ -39,10 +39,10 @@ exports.load = function(log) {
 
 /**
  * Computes additional information for the template
- * @param  {Object}
- * @return {Error} error Any Error that might occur
+ * @return {*} error Any Error that might occur
+ * @param data
  */
-exports.compile = function(data) {
+exports.compile = function (data) {
   //check to see if the data object supports formatting by checking its type field
   if (!data.hasOwnProperty('type')) {
     return new Error('Datafile does not contain a \'type\' field!')
@@ -52,7 +52,7 @@ exports.compile = function(data) {
   if (data.type.constructor === Array) {
     var error = []
     //loop through each compiler IN ORDER
-    _.forEach(data.type, function(value) {
+    _.forEach(data.type, function (value) {
       if (compilers[value]) {
         //invoke the compiler, but do NOT return possible errors directly
         error[error.length] = compilers[value](data, logger)
