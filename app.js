@@ -57,7 +57,7 @@ server.get('/document/:documentID', function (req, res, next) {
   async.parallel({
       /**
        * Reads the LaTeX template and saves it as a String
-       * @return {String}
+       * @return String
        */
       template: function (callback) {
         fs.readFile('exampletemplate.tex', 'utf8', function (error, file) {
@@ -69,7 +69,7 @@ server.get('/document/:documentID', function (req, res, next) {
 
       /**
        * Reads the file and converts the JSON to an object.
-       * @return {Object}
+       * @return Object
        */
       data: function (callback) {
         request(service.datastore + '/document/' + req.params.documentID, function (error, res, body) {
@@ -86,11 +86,11 @@ server.get('/document/:documentID', function (req, res, next) {
             /**
              * Converts the JSON string to an object for further processing. Lo-Dash and
              * Mustache require an object.
-             * @type {String}
+             * @type String
              */
             data = JSON.parse(body)
           } catch (e) {
-            log.fatal(e)
+            log.error(e)
             throw e
           }
 
