@@ -88,7 +88,7 @@ server.get('/document/:documentID', function (req, res, next) {
              */
             data = JSON.parse(body)
           } catch (e) {
-            log.fatal(e)
+            log.warn(e)
             throw e
           }
 
