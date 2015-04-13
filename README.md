@@ -17,7 +17,7 @@ Story CRM is written in JavaScript and is based on NodeJS. So you will need to i
   `npm install -g bunyan`
 
 1. Clone this repository<br/>
- `$ git clone git@github.com:StoryCRM/compile.git`
+ `$ git clone git@github.com:storycrm/compile.git`
 2. Change directory to your newly created folder<br/>
  `$ cd compile`
 3. Install JavaScript dependencies<br/>
